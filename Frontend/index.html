@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction of Disease Outbreaks System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 20%;
+            background-color: #161b22;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sidebar h1 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .sidebar .nav-item {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            color: #c9d1d9;
+            text-decoration: none;
+            border-radius: 5px;
+            background-color: #21262d;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #ec4899;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #db2777;
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .content h2 {
+            color: #ffffff;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            background-color: #161b22;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+        }
+
+        .form-container label {
+            display: block;
+            text-align: left;
+            margin-bottom: 5px;
+            color: #c9d1d9;
+        }
+
+        .form-container input {
+            width: 75%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ec4899;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #db2777;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: green;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .result-bar {
+            margin-top: 20px;
+            height: 30px;
+            border-radius: 5px;
+            background-color: green;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>Prediction of Disease Outbreaks System</h1>
+        <div class="nav-item">
+            <div class="nav-link active" onclick="showForm('diabetes')">
+                <i class="fas fa-heartbeat"></i>
+                Diabetes Prediction
+            </div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-link" onclick="showForm('heart')">
+                <i class="fas fa-heart"></i>
+                Heart Disease Prediction
+            </div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-link" onclick="showForm('parkinsons')">
+                <i class="fas fa-brain"></i>
+                Parkinson's Prediction
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- Diabetes Form -->
+        <div id="diabetes" class="form-container">
+            <h2>Diabetes Prediction using ML</h2>
+            <div class="grid">
+                <div>
+                    <label>Number of Pregnancies</label>
+                    <input type="number" name="pregnancies">
+                </div>
+                <div>
+                    <label>Glucose Level</label>
+                    <input type="number" name="glucose">
+                </div>
+                <div>
+                    <label>Blood Pressure Value</label>
+                    <input type="number" name="bloodPressure">
+                </div>
+                <div>
+                    <label>Skin Thickness Value</label>
+                    <input type="number" name="skinThickness">
+                </div>
+                <div>
+                    <label>Insulin Level</label>
+                    <input type="number" name="insulin">
+                </div>
+                <div>
+                    <label>BMI Value</label>
+                    <input type="number" name="bmi">
+                </div>
+                <div>
+                    <label>Diabetes Pedigree Function Value</label>
+                    <input type="number" step="0.01" name="diabetesPedigree">
+                </div>
+                <div>
+                    <label>Age of the Person</label>
+                    <input type="number" name="age">
+                </div>
+            </div>
+            <button type="button" onclick="predict('diabetes')">Diabetes Test Result</button>
+            <div id="diabetes-result-bar" class="result-bar"></div>
+        </div>
+
+        <!-- Heart Disease Form -->
+        <div id="heart" class="form-container hidden">
+            <h2>Heart Disease Prediction using ML</h2>
+            <div class="grid">
+                <div>
+                    <label>Age</label>
+                    <input type="number" name="age">
+                </div>
+                <div>
+                    <label>Sex</label>
+                    <input type="number" name="sex">
+                </div>
+                <div>
+                    <label>Chest Pain Type</label>
+                    <input type="number" name="cp">
+                </div>
+                <div>
+                    <label>Resting Blood Pressure</label>
+                    <input type="number" name="trestbps">
+                </div>
+                <div>
+                    <label>Cholesterol</label>
+                    <input type="number" name="chol">
+                </div>
+                <div>
+                    <label>Fasting Blood Sugar</label>
+                    <input type="number" name="fbs">
+                </div>
+                <div>
+                    <label>Resting ECG Results</label>
+                    <input type="number" name="restecg">
+                </div>
+                <div>
+                    <label>Maximum Heart Rate Achieved</label>
+                    <input type="number" name="thalach">
+                </div>
+                <div>
+                    <label>Exercise Induced Angina</label>
+                    <input type="number" name="exang">
+                </div>
+                <div>
+                    <label>ST Depression Induced</label>
+                    <input type="number" step="0.01" name="oldpeak">
+                </div>
+                <div>
+                    <label>Slope of ST Segment</label>
+                    <input type="number" name="slope">
+                </div>
+                <div>
+                    <label>Number of Major Vessels</label>
+                    <input type="number" name="ca">
+                </div>
+                <div>
+                    <label>Thalassemia</label>
+                    <input type="number" name="thal">
+                </div>
+                <div>
+                    <label>Target</label>
+                    <input type="number" name="target">
+                </div>
+            </div>
+            <button type="button" onclick="predict('heart')">Heart Disease Test Result</button>
+            <div id="heart-result-bar" class="result-bar"></div>
+        </div>
+
+        <!-- Parkinson's Disease Form -->
+        <div id="parkinsons" class="form-container hidden">
+            <h2>Parkinson's Disease Prediction using ML</h2>
+            <div class="grid">
+                <div>
+                    <label>Name</label>
+                    <input type="text" name="name">
+                </div>
+                <div>
+                    <label>MDVP:Fo(Hz)</label>
+                    <input type="number" name="mdvpFo">
+                </div>
+                <div>
+                    <label>MDVP:Fhi(Hz)</label>
+                    <input type="number" name="mdvpFhi">
+                </div>
+                <div>
+                    <label>MDVP:Flo(Hz)</label>
+                    <input type="number" name="mdvpFlo">
+                </div>
+                <div>
+                    <label>MDVP:Jitter(%)</label>
+                    <input type="number" step="0.01" name="mdvpJitterPercent">
+                </div>
+                <div>
+                    <label>MDVP:Jitter(Abs)</label>
+                    <input type="number" step="0.0001" name="mdvpJitterAbs">
+                </div>
+                <div>
+                    <label>MDVP:RAP</label>
+                    <input type="number" step="0.0001" name="mdvpRAP">
+                </div>
+                <div>
+                    <label>MDVP:PPQ</label>
+                    <input type="number" step="0.0001" name="mdvpPPQ">
+                </div>
+                <div>
+                    <label>Jitter:DDP</label>
+                    <input type="number" step="0.0001" name="jitterDDP">
+                </div>
+                <div>
+                    <label>MDVP:Shimmer</label>
+                    <input type="number" step="0.01" name="mdvpShimmer">
+                </div>
+                <div>
+                    <label>MDVP:Shimmer(dB)</label>
+                    <input type="number" step="0.01" name="mdvpShimmerDB">
+                </div>
+                <div>
+                    <label>Shimmer:APQ3</label>
+                    <input type="number" step="0.0001" name="shimmerAPQ3">
+                </div>
+                <div>
+                    <label>Shimmer:APQ5</label>
+                    <input type="number" step="0.0001" name="shimmerAPQ5">
+                </div>
+                <div>
+                    <label>MDVP:APQ</label>
+                    <input type="number" step="0.0001" name="mdvpAPQ">
+                </div>
+                <div>
+                    <label>Shimmer:DDA</label>
+                    <input type="number" step="0.0001" name="shimmerDDA">
+                </div>
+                <div>
+                    <label>NHR</label>
+                    <input type="number" step="0.0001" name="nhr">
+                </div>
+                <div>
+                    <label>HNR</label>
+                    <input type="number" step="0.01" name="hnr">
+                </div>
+                <div>
+                    <label>Status</label>
+                    <input type="number" name="status">
+                </div>
+                <div>
+                    <label>RPDE</label>
+                    <input type="number" step="0.0001" name="rpde">
+                </div>
+                <div>
+                    <label>DFA</label>
+                    <input type="number" step="0.0001" name="dfa">
+                </div>
+                <div>
+                    <label>Spread1</label>
+                    <input type="number" step="0.0001" name="spread1">
+                </div>
+                <div>
+                    <label>Spread2</label>
+                    <input type="number" step="0.0001" name="spread2">
+                </div>
+                <div>
+                    <label>D2</label>
+                    <input type="number" step="0.0001" name="d2">
+                </div>
+                <div>
+                    <label>PPE</label>
+                    <input type="number" step="0.0001" name="ppe">
+                </div>
+            </div>
+            <button type="button" onclick="predict('parkinsons')">Parkinson's Test Result</button>
+            <div id="parkinsons-result-bar" class="result-bar"></div>
+        </div>
+    </div>
+
+    <script>
+        function showForm(formId) {
+            document.querySelectorAll('.form-container').forEach(form => {
+                form.classList.add('hidden');
+            });
+            document.querySelector(`#${formId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function predict(disease) {
+            const resultBar = document.getElementById(`${disease}-result-bar`);
+            resultBar.style.display = 'block';
+            resultBar.style.backgroundColor = 'yellow';
+
+            setTimeout(() => {
+                resultBar.style.backgroundColor = 'green';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
